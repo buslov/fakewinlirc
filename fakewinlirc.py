@@ -1,5 +1,6 @@
 import os.path
 import socket
+import sys
 import threading
 import bottle
 
@@ -14,7 +15,7 @@ def sendtoall(cmd):
         try:
             c.sendall(d)
         except socket.error as e:
-            print("exception:", e.errno, e)
+            print("exception:", e.errno, e, file=sys.stderr)
             closed.append(c)
     for c in closed:
         c.close()
@@ -43,16 +44,16 @@ def tcpserver():
     s.listen(5)
     while True:
         c, a = s.accept()
-        print("accepted", a)
+        print("accepted", a, file=sys.stderr)
         clients.append(c)
 
 
 if __name__ == "__main__":
-    print("os.getcwd():", os.getcwd())
+    print("os.getcwd():", os.getcwd(), file=sys.stderr)
     scriptdir = os.path.dirname(os.path.abspath(__file__))
-    print("scriptdir:", scriptdir)
+    print("scriptdir:", scriptdir, file=sys.stderr)
     os.chdir(scriptdir)
-    print("os.getcwd():", os.getcwd())
+    print("os.getcwd():", os.getcwd(), file=sys.stderr)
     t = threading.Thread(target=tcpserver)
     t.daemon = True
     t.start()
